@@ -5,8 +5,9 @@ using namespace std;
 struct Node
 {
     int data;
+    Node* previous;
     Node* next;
-    Node(int d){data=d;next=NULL;}
+    Node(int d){data=d;previous=NULL;next=NULL;}
 };
 
 class NodeList
@@ -48,7 +49,7 @@ void NodeList::clear()
     {
         //这里要讲node链表赋NULL，所以要取指针 
         Node** p = &(node->next);
-        while (*p != NULL)
+        while (*p != NULL && *p != node)
         {
             Node* pNext = (*p)->next;
             delete *p;
@@ -77,7 +78,7 @@ int NodeList::size()
     {
         int count = 1;
         Node* p = node;
-        while(p->next != NULL)
+        while(p->next != NULL && p->next != node)
         {
             ++count;
             p = p->next;
@@ -97,11 +98,11 @@ void NodeList::print()
     else
     {
         Node* p = node;
-        while(p != NULL)
+        do
         {
             cout<<p->data<<" ";
             p = p->next;
-        }
+        }while(p != NULL && p != node);
     }
     cout<<endl;
 }
@@ -122,7 +123,7 @@ int NodeList::get(int pos)
     }
     int index = 0;
     Node* p = node;
-    while (p != NULL)
+    do
     {
         ++index;
         if (index == pos)
@@ -133,7 +134,7 @@ int NodeList::get(int pos)
         {
             p = p->next;
         }
-    }
+    }while(p != NULL && p != node);
     if (index < pos)
     {
         cout<<"链表长度不足"<<pos<<endl;
@@ -157,41 +158,44 @@ void NodeList::insert(int pos, int d)
         cout<<"链表为空"<<endl;
         return ;
     }
-    int ret = 0;
-    if (pos == 1)
+    int size = this->size();
+    if (size < pos)
     {
-        Node* pNode = new Node(d);
-        pNode->next = node;
-        node = pNode;
+        cout<<"链表长度不足"<<pos<<endl;
+        return ;
     }
     else
     {
-        Node* previous = node;
-        Node* current = node;
-        int index = 0;
-        while (current != NULL)
+        if (size == 1)
         {
-            ++index;
-            if (index == pos)
-            {
-                break;
-            }
-            else
-            {
-                previous = current;
-                current = current->next;
-            }
-        }
-        if (index < pos)
-        {
-            cout<<"链表长度不足"<<pos<<endl;
-            return ;
+            Node* pNode = new Node(d);
+            pNode->previous = node;
+            pNode->next = node;
+            node->next = pNode;
+            node->previous = pNode;
+            node = pNode;
         }
         else
         {
+            Node* current = node;
+            int index = 0;
+            while (current != NULL)
+            {
+                ++index;
+                if (index == pos)
+                {
+                    break;
+                }
+                else
+                {
+                    current = current->next;
+                }
+            }
             Node* pNode = new Node(d);
-            previous->next = pNode;
+            pNode->previous = current->previous;
             pNode->next = current;
+            current->previous->next = pNode;
+            current->previous = pNode;
         }
     }
 }
@@ -210,47 +214,49 @@ int NodeList::remove(int pos)
         cout<<"链表为空"<<endl;
         return 0;
     }
-    int ret = 0;
-    if (pos == 1)
+    int size = this->size();
+    if (size < pos)
     {
-        Node* pFirst = node;
-        node = node->next;
-        ret = pFirst->data;
-        delete pFirst;
-        pFirst = NULL;
+        cout<<"链表长度不足"<<pos<<endl;
+        return 0;
     }
     else
     {
-        Node* previous = node;
-        Node* current = node;
-        int index = 0;
-        while (current != NULL)
+        int ret = 0;
+        if (size == 1)
         {
-            ++index;
-            if (index == pos)
-            {
-                break;
-            }
-            else
-            {
-                previous = current;
-                current = current->next;
-            }
-        }
-        if (index < pos)
-        {
-            cout<<"链表长度不足"<<pos<<endl;
-            return 0;
+            ret = node->data;
+            delete node;
+            node = NULL;
         }
         else
         {
-            previous->next = current->next;
+            Node* current = node;
+            int index = 0;
+            while (current != NULL)
+            {
+                ++index;
+                if (index == pos)
+                {
+                    break;
+                }
+                else
+                {
+                    current = current->next;
+                }
+            }            
+            current->previous->next = current->next;
+            current->next->previous = current->previous;
             ret = current->data;
             delete current;
             current = NULL;
         }
+        if (size == 1)
+        {
+            node->previous = node->next = NULL;
+        }
+        return ret;
     }
-    return ret;
 }
 
 //链表头插入数据 
@@ -264,7 +270,21 @@ void NodeList::push_front(int d)
     }
     else
     {
-        pNode->next = node;
+        int size = this->size();
+        if (size == 1)
+        {
+            pNode->next = node;
+            pNode->previous = node;
+            node->next = pNode;
+            node->previous = pNode;
+        }
+        else
+        {
+            pNode->next = node;
+            pNode->previous = node->previous;
+            node->previous->next= pNode;
+            node->previous = pNode;
+        }
         node = pNode;
         cout<<"链表头插入"<<pNode->data<<endl;
         return ;
@@ -282,13 +302,22 @@ void NodeList::push_back(int d)
     }
     else
     {
-        Node* p = node;
-        while (p->next != NULL)
+        int size = this->size();
+        if (size == 1)
         {
-            p = p->next;
+            pNode->next = node;
+            pNode->previous = node;
+            node->next = pNode;
+            node->previous = pNode;
         }
-        p->next = pNode;
-        cout<<"链表尾插入"<<pNode->data<<endl;
+        else
+        {
+            pNode->next = node;
+            pNode->previous = node->previous;
+            node->previous->next= pNode;
+            node->previous = pNode;
+        }
+        cout<<"链表头插入"<<pNode->data<<endl;
         return ;
     }
 }
@@ -303,6 +332,10 @@ int main()
     pNodeList->print();
     pNodeList->get(2);
     
+    pNodeList->insert(1, 7);
+    pNodeList->print();
+    pNodeList->get(2);
+    
     pNodeList->push_front(5);
     pNodeList->print();
     pNodeList->get(2);
@@ -312,10 +345,6 @@ int main()
     pNodeList->get(2);
     
     pNodeList->remove(2);
-    pNodeList->print();
-    pNodeList->get(2);
-    
-    pNodeList->insert(2, 7);
     pNodeList->print();
     pNodeList->get(2);
     
