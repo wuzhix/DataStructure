@@ -21,6 +21,7 @@ public:
     bool empty();
     int size();
     void print();
+    void u_print();
     int get(int pos);
     void insert(int pos, int d);
     int remove(int pos);
@@ -102,6 +103,26 @@ void NodeList::print()
         {
             cout<<p->data<<" ";
             p = p->next;
+        }while(p != NULL && p != node);
+    }
+    cout<<endl;
+}
+
+//反向打印链表数据 
+void NodeList::u_print()
+{
+    cout<<"反向输出链表：";
+    if (node == NULL)
+    {
+        return ;
+    }
+    else
+    {
+        Node* p = node;
+        do
+        {
+            cout<<p->data<<" ";
+            p = p->previous;
         }while(p != NULL && p != node);
     }
     cout<<endl;
@@ -330,26 +351,32 @@ int main()
     
     pNodeList->push_back(3);
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     pNodeList->insert(1, 7);
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     pNodeList->push_front(5);
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     pNodeList->push_front(8);
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     pNodeList->remove(2);
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     pNodeList->clear();
     pNodeList->print();
+    pNodeList->u_print();
     pNodeList->get(2);
     
     system("pause");
