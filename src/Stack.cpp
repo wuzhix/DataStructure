@@ -82,7 +82,7 @@ template <class T>
 void Stack<T>::push(T d)
 {
     cout<<"ÈëÕ»Êý¾Ý"<<d<<" ";
-    if (cur_len == 0 || cur_len == max_len - 1)
+    if (cur_len == 0 || cur_len == max_len)
     {
         max_len = max_len * 2;
         pData = static_cast<T*>(realloc(pData, max_len * sizeof(T)));
