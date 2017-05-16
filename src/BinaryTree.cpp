@@ -6,14 +6,14 @@ struct Node
 {
     int data;
     Node* left;
-	Node* right;
+    Node* right;
     Node(int d){data=d;left=right=NULL;}
 };
 
 class BinaryTree
 {
 private:
-    Node* node;		//根节点
+    Node* node;        //根节点
 public:
     BinaryTree();
     ~BinaryTree();
@@ -22,14 +22,14 @@ public:
     bool empty();
     void insert(int d);
     void remove(int d);
-	Node* find(int d);
+    Node* find(int d);
 private:
-	void _print(Node* pNode);
-	void _clear(Node** pNode);
-	void _insert(Node** pNode, int d);
-	void _remove(Node** pNode, int d);
-	Node* _find(Node* pNode, int d);
-	
+    void _print(Node* pNode);
+    void _clear(Node** pNode);
+    void _insert(Node** pNode, int d);
+    void _remove(Node** pNode, int d);
+    Node* _find(Node* pNode, int d);
+    
 };
 
 BinaryTree::BinaryTree():node(NULL)
@@ -44,12 +44,12 @@ BinaryTree::~BinaryTree()
 //中序输出二叉树
 void BinaryTree::_print(Node* pNode)
 {
-	if (pNode != NULL)
-	{
-		_print(pNode->left);
-		cout<<pNode->data<<" ";
-		_print(pNode->right);
-	}
+    if (pNode != NULL)
+    {
+        _print(pNode->left);
+        cout<<pNode->data<<" ";
+        _print(pNode->right);
+    }
 }
 
 void BinaryTree::_insert(Node** pNode, int d)
@@ -127,13 +127,13 @@ Node* BinaryTree::_find(Node* pNode, int d)
 //后序删除二叉树
 void BinaryTree::_clear(Node** pNode)
 {
-	if (*pNode != NULL)
-	{
-		_clear(&(*pNode)->left);
-		_clear(&(*pNode)->right);
-		delete *pNode;
-		*pNode = NULL;
-	}
+    if (*pNode != NULL)
+    {
+        _clear(&(*pNode)->left);
+        _clear(&(*pNode)->right);
+        delete *pNode;
+        *pNode = NULL;
+    }
 }
 
 //清空二叉树 

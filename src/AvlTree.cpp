@@ -5,37 +5,37 @@ using namespace std;
 struct Node
 {
     int data;
-	int height;
+    int height;
     Node* left;
-	Node* right;
+    Node* right;
     Node(int d){data=d;height=0;left=right=NULL;}
 };
 
 class AvlTree
 {
 private:
-    Node* node;		//根节点
+    Node* node;        //根节点
 public:
     AvlTree();
     ~AvlTree();
-	int height();
+    int height();
     void clear();    
     void print();
     bool empty();
     void insert(int d);
-	Node* find(int d);
+    Node* find(int d);
 private:
-	int _height(Node* pNode);
-	void _print(Node* pNode);
-	void _clear(Node** pNode);
-	void _insert(Node** pNode, int d);
-	Node* _find(Node* pNode, int d);
-	Node* _llRotation(Node* pNode);
-	Node* _rrRotation(Node* pNode);
-	Node* _lrRotation(Node* pNode);
-	Node* _rlRotation(Node* pNode);
-	int _max(int a, int b);
-	
+    int _height(Node* pNode);
+    void _print(Node* pNode);
+    void _clear(Node** pNode);
+    void _insert(Node** pNode, int d);
+    Node* _find(Node* pNode, int d);
+    Node* _llRotation(Node* pNode);
+    Node* _rrRotation(Node* pNode);
+    Node* _lrRotation(Node* pNode);
+    Node* _rlRotation(Node* pNode);
+    int _max(int a, int b);
+    
 };
 
 AvlTree::AvlTree():node(NULL)
@@ -49,22 +49,22 @@ AvlTree::~AvlTree()
 
 int AvlTree::_height(Node* pNode)
 {
-	if (pNode != NULL)
-	{
-		return pNode->height;
-	}
-	return 0;
+    if (pNode != NULL)
+    {
+        return pNode->height;
+    }
+    return 0;
 }
 
 //中序输出二叉树
 void AvlTree::_print(Node* pNode)
 {
-	if (pNode != NULL)
-	{
-		_print(pNode->left);
-		cout<<pNode->data<<" ";
-		_print(pNode->right);
-	}
+    if (pNode != NULL)
+    {
+        _print(pNode->left);
+        cout<<pNode->data<<" ";
+        _print(pNode->right);
+    }
 }
 
 void AvlTree::_insert(Node** pNode, int d)
@@ -77,43 +77,43 @@ void AvlTree::_insert(Node** pNode, int d)
     else if (d < (*pNode)->data)
     {
         _insert(&((*pNode)->left), d);
-		if (_height((*pNode)->left) - _height((*pNode)->right) == 2)
-		{
-			if (d < (*pNode)->left->data)
-			{
+        if (_height((*pNode)->left) - _height((*pNode)->right) == 2)
+        {
+            if (d < (*pNode)->left->data)
+            {
                 cout<<"插入后LL旋转"<<endl;
-				*pNode = _llRotation(*pNode);
-			}
-			else
-			{
+                *pNode = _llRotation(*pNode);
+            }
+            else
+            {
                 cout<<"插入后LR旋转"<<endl;
-				*pNode = _lrRotation(*pNode);
-			}
-		}
+                *pNode = _lrRotation(*pNode);
+            }
+        }
     }
     else if (d > (*pNode)->data)
     {
         _insert(&((*pNode)->right), d);
-		if (_height((*pNode)->right) - _height((*pNode)->left) == 2)
-		{
-			if (d > (*pNode)->right->data)
-			{
+        if (_height((*pNode)->right) - _height((*pNode)->left) == 2)
+        {
+            if (d > (*pNode)->right->data)
+            {
                 cout<<"插入后RR旋转"<<endl;
-				*pNode = _rrRotation(*pNode);
-			}
-			else
-			{
+                *pNode = _rrRotation(*pNode);
+            }
+            else
+            {
                 cout<<"插入后RL旋转"<<endl;
-				*pNode = _rlRotation(*pNode);
-			}
-		}
+                *pNode = _rlRotation(*pNode);
+            }
+        }
     }
-	else
-	{
-		cout << "数据已经存在" << endl;
-		return ;
-	}
-	(*pNode)->height = _max(_height((*pNode)->left), _height((*pNode)->right)) + 1;
+    else
+    {
+        cout << "数据已经存在" << endl;
+        return ;
+    }
+    (*pNode)->height = _max(_height((*pNode)->left), _height((*pNode)->right)) + 1;
 }
 
 Node* AvlTree::_find(Node* pNode, int d)
@@ -144,63 +144,63 @@ Node* AvlTree::_find(Node* pNode, int d)
 //后序删除二叉树
 void AvlTree::_clear(Node** pNode)
 {
-	if (*pNode != NULL)
-	{
-		_clear(&(*pNode)->left);
-		_clear(&(*pNode)->right);
-		delete *pNode;
-		*pNode = NULL;
-	}
+    if (*pNode != NULL)
+    {
+        _clear(&(*pNode)->left);
+        _clear(&(*pNode)->right);
+        delete *pNode;
+        *pNode = NULL;
+    }
 }
 
 int AvlTree::_max(int a, int b)
 {
-	return a > b ? a : b;
+    return a > b ? a : b;
 }
 
 Node* AvlTree::_llRotation(Node* pNode)
 {
-	Node* n = NULL;
-	n = pNode->left;
-	pNode->left = n->right;
-	n->right = pNode;
-	
-	pNode->height = _max(_height(pNode->left), _height(pNode->right)) + 1;
-	n->height = _max(_height(n->left), pNode->height) + 1;
-	
-	return n;
+    Node* n = NULL;
+    n = pNode->left;
+    pNode->left = n->right;
+    n->right = pNode;
+    
+    pNode->height = _max(_height(pNode->left), _height(pNode->right)) + 1;
+    n->height = _max(_height(n->left), pNode->height) + 1;
+    
+    return n;
 }
 
 Node* AvlTree::_rrRotation(Node* pNode)
 {
-	Node* n = NULL;
-	n = pNode->right;
-	pNode->right = n->left;
-	n->left = pNode;
-	
-	pNode->height = _max(_height(pNode->left), _height(pNode->right)) + 1;
-	n->height = _max(_height(n->right), pNode->height) + 1;
-	
-	return n;
+    Node* n = NULL;
+    n = pNode->right;
+    pNode->right = n->left;
+    n->left = pNode;
+    
+    pNode->height = _max(_height(pNode->left), _height(pNode->right)) + 1;
+    n->height = _max(_height(n->right), pNode->height) + 1;
+    
+    return n;
 }
 
 Node* AvlTree::_lrRotation(Node* pNode)
 {
-	pNode->left = _rrRotation(pNode->left);
-	
-	return _llRotation(pNode);
+    pNode->left = _rrRotation(pNode->left);
+    
+    return _llRotation(pNode);
 }
 
 Node* AvlTree::_rlRotation(Node* pNode)
 {
-	pNode->right = _llRotation(pNode->right);
-	
-	return _rrRotation(pNode);
+    pNode->right = _llRotation(pNode->right);
+    
+    return _rrRotation(pNode);
 }
 
 int AvlTree::height()
 {
-	return _height(node);
+    return _height(node);
 }
 
 //清空二叉树 
