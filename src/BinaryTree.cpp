@@ -63,9 +63,13 @@ void BinaryTree::_insert(Node** pNode, int d)
     {
         _insert(&((*pNode)->left), d);
     }
-    else
+    else if (d > (*pNode)->data)
     {
         _insert(&((*pNode)->right), d);
+    }
+    else
+    {
+        cout << "数据"<<d<<"已存在" << endl;
     }
 }
 
@@ -192,9 +196,9 @@ int main()
     BinaryTree* tree = new BinaryTree;
     bool empty = tree->empty();
     
-    int d[] = {100,50,150,80,60,70,40,20,10,30,130,140,120,110,180,200,190,160,170,90};
+    int d[] = {100,50,150,80,60,70,40,20,10,30,130,140,120,110,180,200,190,160,170,90,160};
     
-    for(int i = 0; i < 20; ++i)
+    for(int i = 0; i < sizeof(d)/sizeof(int); ++i)
     {
         tree->insert(d[i]);
         tree->print();
